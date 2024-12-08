@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farming Assistance Web Service</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("https://example.com/background.jpg"); /* Replace with the actual background image URL */
+        background-size: cover;
+        background-position: center;
+      }
+      .container {
+        text-align: center;
+        color: #fff;
+      }
+      .header {
+        background-color: rgba(0, 128, 0, 0.7);
+        padding: 20px;
+      }
+      .header h1 {
+        margin: 0;
+      }
+      .login-options {
+        display: flex;
+        justify-content: center;
+        margin: 40px 0;
+      }
+      .login-option {
+        margin: 0 20px;
+        text-align: center;
+      }
+      .login-option img {
+        width: 100px;
+        height: 100px;
+        border: 2px solid #fff;
+        border-radius: 8px;
+      }
+      .login-option button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: #fff;
+        cursor: pointer;
+      }
+      .login-option button:hover {
+        background-color: #218838;
+      }
+      .exit {
+        margin-top: 20px;
+      }
+      .exit button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #dc3545;
+        color: #fff;
+        cursor: pointer;
+      }
+      .exit button:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>FARMING ASSISTANCE WEB SERVICE</h1>
+      </div>
+      <div class="login-options">
+        <div class="login-option">
+          <img
+            src="/home/ubuntu/Desktop/FrontendFarm/Screenshot from 2024-12-08 02-24-02.png"
+            alt="Farmer Login"
+          />
+          <button onclick="location.href='FarmerLogin.html'">
+            Farmer Login
+          </button>
+        </div>
+        <div class="login-option">
+          <img
+            src="/home/ubuntu/Desktop/FrontendFarm/Screenshot from 2024-12-08 02-24-02.png"
+            alt="Admin Login"
+          />
+          <button onclick="location.href='AdminLogin.html'">Admin Login</button>
+        </div>
+        <div class="login-option">
+          <img
+            src="/home/ubuntu/Desktop/FrontendFarm/Screenshot from 2024-12-08 02-24-02.png"
+            alt="Supplier Login"
+          />
+          <button onclick="location.href='SupplierLogin.html'">
+            Supplier Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

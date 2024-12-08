@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supplier Login</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("https://example.com/background.jpg"); /* Thay URL hình nền tại đây */
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background-color: #bdf5bd;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        width: 400px;
+        text-align: center;
+      }
+      .logo img {
+        max-width: 100px;
+      }
+      .container h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #000;
+      }
+      .form-group {
+        margin: 15px 0;
+        text-align: left;
+      }
+      .form-group label {
+        font-size: 14px;
+        color: #000;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .login-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      .login-button:hover {
+        background-color: #218838;
+      }
+      .register {
+        margin-top: 20px;
+        font-size: 14px;
+      }
+      .register a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .register a:hover {
+        text-decoration: underline;
+      }
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: red;
+        color: #fff;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .close:hover {
+        background-color: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="close" onclick="window.close()">X</button>
+    <div class="container">
+      <div class="logo">
+        <img src="https://example.com/logo.jpg" alt="Logo" />
+        <!-- Thay URL logo tại đây -->
+      </div>
+      <h2>SUPPLIER LOGIN</h2>
+      <form id="loginForm" method="POST">
+        <div class="form-group">
+          <label for="username">USERNAME:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">PASSWORD:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-button">LOGIN</button>
+      </form>
+      <div class="register">NEW ???? <a href="/register">REGISTER</a></div>
+    </div>
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(event) {
+          event.preventDefault(); 
+
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+
+          fetch('http://localhost:8080/api/suppliers/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  username: username,
+                  password: password
+              })
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Login failed');
+              }
+              return response.json();
+          })
+          .then(data => {
+
+            const role =data.data.role
+            const account = data.data.account
+            localStorage.setItem('role', role);
+            localStorage.setItem('account', JSON.stringify(account));
+            
+            alert('Login successful');
+
+            window.location.href = 'Supplierhome.html';
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('Login failed. Please check your username and password.');
+          });
+      });
+  </script>
+  </body>
+</html>

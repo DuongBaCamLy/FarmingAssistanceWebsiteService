@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Write Comment</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      .header {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      form label {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      form input,
+      form textarea,
+      form button {
+        margin-top: 5px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      form button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      form button:hover {
+        background-color: #218838;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      table th,
+      table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      table th {
+        background-color: #007bff;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Write Comment</h1>
+    </div>
+    <div class="container">
+      <form id="comment-form">
+        <label for="product-comment">Comment Product</label>
+        <textarea id="product-comment" rows="2" required></textarea>
+
+        <label for="supplier-comment">Comment Supplier</label>
+        <textarea id="supplier-comment" rows="2" required></textarea>
+
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" required></textarea>
+
+        <label for="created-date">Created Date</label>
+        <input type="date" id="created-date" required />
+
+        <button type="submit">Submit Comment</button>
+      </form>
+    </div>
+    <div class="container">
+      <h2>Comments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Product Comment</th>
+            <th>Supplier Comment</th>
+            <th>Description</th>
+            <th>Created Date</th>
+          </tr>
+        </thead>
+        <tbody id="comment-data">
+          <!-- Data will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // Submit form data
+      document
+        .getElementById("comment-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault()
+
+          const data = {
+            productComment: document.getElementById("product-comment").value,
+            supplierComment: document.getElementById("supplier-comment").value,
+            description: document.getElementById("description").value,
+            createdDate: document.getElementById("created-date").value,
+          }
+
+          try {
+            const response = await fetch("/api/comments", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+
+            if (response.ok) {
+              alert("Comment added successfully!")
+              fetchComments()
+              document.getElementById("comment-form").reset()
+            } else {
+              alert("Failed to add comment.")
+            }
+          } catch (error) {
+            console.error("Error:", error)
+            alert("An error occurred.")
+          }
+        })
+
+      // Fetch and display comments
+      async function fetchComments() {
+        try {
+          const response = await fetch("/api/comments")
+          const data = await response.json()
+
+          const tableBody = document.getElementById("comment-data")
+          tableBody.innerHTML = ""
+
+          data.forEach((comment) => {
+            const row = document.createElement("tr")
+            row.innerHTML = `
+                        <td>${comment.productComment}</td>
+                        <td>${comment.supplierComment}</td>
+                        <td>${comment.description}</td>
+                        <td>${comment.createdDate}</td>
+                    `
+            tableBody.appendChild(row)
+          })
+        } catch (error) {
+          console.error("Error fetching comments:", error)
+        }
+      }
+
+      // Load comments on page load
+      window.onload = fetchComments
+    </script>
+  </body>
+</html>

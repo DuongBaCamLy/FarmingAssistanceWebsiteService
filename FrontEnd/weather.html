@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Information</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("https://example.com/weather-bg.jpg"); /* Replace with your background image link */
+        background-size: cover;
+        background-position: center;
+        color: #333;
+      }
+      .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+      .container {
+        width: 80%;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      table, th, td {
+        border: 1px solid #ddd;
+      }
+      th, td {
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .back-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button onclick="history.back()"
+            style="float: left; margin: 10px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+            Back
+        </button>
+      <h1>Weather List</h1> 
+    </div>
+    <div class="container">
+      <table id="weatherTable">
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Temperature (°C)</th>
+            <th>Humidity (%)</th>
+            <th>Wind Speed (km/h)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost:8080/api/weather")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch weather data");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const tableBody = document.querySelector("#weatherTable tbody");
+            data.forEach((weather) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${weather.location || "N/A"}</td>
+                <td>${weather.temperature ? `${weather.temperature} °C` : "N/A"}</td>
+                <td>${weather.humidity ? `${weather.humidity} %` : "N/A"}</td>
+                <td>${weather.windSpeed ? `${weather.windSpeed} km/h` : "N/A"}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to load weather data. Please try again later.");
+          });
+      });
+    </script>
+  </body>
+</html>

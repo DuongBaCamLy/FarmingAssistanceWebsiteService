@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 30px;
+        width: 400px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .container h2 {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+      .submit-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .submit-button:hover {
+        background-color: #218838;
+      }
+      .back-button {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: #007bff;
+        text-decoration: none;
+      }
+      .back-button:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Add Product</h2>
+      <form id="add-product-form">
+        <div class="form-group">
+          <label for="product-name">Product Name</label>
+          <input type="text" id="product-name" name="productName" required />
+        </div>
+        <div class="form-group">
+          <label for="product-id">Product ID</label>
+          <input type="text" id="product-id" name="productId" required />
+        </div>
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="number" id="price" name="price" step="0.01" required />
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+      </form>
+      <a href="SupplierHome.html" class="back-button">Back to Home</a>
+    </div>
+
+    <script>
+      // Handle form submission
+      document
+        .getElementById("add-product-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault()
+
+          // Gather form data
+          const formData = {
+            productName: document.getElementById("product-name").value,
+            productId: document.getElementById("product-id").value,
+            price: document.getElementById("price").value,
+          }
+
+          try {
+            // Send data to backend
+            const response = await fetch("/api/products", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            })
+
+            if (response.ok) {
+              alert("Product added successfully!")
+              document.getElementById("add-product-form").reset()
+            } else {
+              alert("Failed to add product. Please try again.")
+            }
+          } catch (error) {
+            console.error("Error:", error)
+            alert("An error occurred. Please try again later.")
+          }
+        })
+    </script>
+  </body>
+</html>

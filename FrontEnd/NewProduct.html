@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Product</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      .header {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .header button {
+        float: left;
+        margin: 10px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .header button:hover {
+        background-color: #0056b3;
+      }
+      .container {
+        width: 60%;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        margin: 10px 0 5px;
+        font-weight: bold;
+      }
+      input, select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .button {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button onclick="history.back()">Back</button>
+      <h1>Add New Product</h1>
+    </div>
+    <div class="container">
+      <form id="productForm">
+        <label for="name">Product Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter product name" required />
+
+        <label for="price">Price</label>
+        <input type="number" id="price" name="price" placeholder="Enter product price" step="0.01" required />
+        <label for="image">Image</label>
+        <select id="image" name="image" required>
+          <option value="rau-cai.jpg">Rau cải</option>
+          <option value="ca-rot.jpg">Cà rốt</option>
+          <option value="khoai-tay.jpg">Khoai tây</option>
+      </select>
+
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+          <option value="Available">Available</option>
+          <option value="Unavailable">Unavailable</option>
+        </select>
+
+        <button type="button" class="button" onclick="addProduct()">Add Product</button>
+      </form>
+    </div>
+    <script>
+      async function addProduct() {
+        const name = document.getElementById("name").value;
+        const price = parseFloat(document.getElementById("price").value);
+        const status = document.getElementById("status").value;
+        const supplierId =JSON.parse(localStorage.getItem("account")).supplierId
+        if(!supplierId){
+            alert("Session Timeout, Please Login again");
+            return
+        }
+        const urlImg  = document.getElementById("image").value;
+        const product = {
+          name: name,
+          price: price,
+          status: status,
+          supplierId,
+          urlImg
+        };
+
+        try {
+          const response = await fetch(`http://localhost:8080/api/products/supplier/${supplierId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to add product");
+          }
+
+          alert("Product added successfully!");
+          history.back();
+        } catch (error) {
+          console.error("Error adding product:", error);
+          alert("Failed to add product. Please try again.");
+        }
+      }
+    </script>
+  </body>
+</html>

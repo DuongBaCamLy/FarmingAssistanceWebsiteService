@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field Information</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .header {
+      background-color: #28a745;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .header button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .header button:hover {
+      background-color: #0056b3;
+    }
+
+    .container {
+      width: 80%;
+      margin: 20px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <button onclick="history.back()"
+    style="float: left; margin: 10px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+    Back
+  </button>
+    <h1>Field List</h1>
+    <button onclick="addNewField()">Add New Field</button>
+  </div>
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="field-data">
+        <!-- Data will be inserted dynamically here -->
+      </tbody>
+    </table>
+  </div>
+  <script>
+    async function fetchFieldData() {
+      const account = JSON.parse(localStorage.getItem("account"));
+      if (!account.farmerId) {
+        window.location.href = 'FarmerLogin.html';
+        return;
+      }
+
+      const apiUrl = `http://localhost:8080/api/fields/farmer/${account.farmerId}`;
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error("Failed to fetch field data");
+        }
+
+        const data = await response.json();
+
+        const tableBody = document.getElementById("field-data");
+        tableBody.innerHTML = "";
+
+        data.forEach((field) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+              <td>${field.name}</td>
+              <td>${field.status}</td>
+            `;
+
+          row.addEventListener("click", () => {
+            window.location.href = `FieldDetail.html?fieldId=${field.fieldId}`;
+          });
+
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error fetching field data:", error);
+        const tableBody = document.getElementById("field-data");
+        tableBody.innerHTML = `<tr><td colspan="3">Failed to load data. Please try again later.</td></tr>`;
+      }
+    }
+
+    function addNewField() {
+      const farmerId = new URLSearchParams(window.location.search).get("farmerId");
+      window.location.href = `NewField.html`;
+    }
+
+    window.onload = fetchFieldData;
+  </script>
+</body>
+
+</html>

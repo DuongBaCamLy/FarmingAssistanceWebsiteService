@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header button {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .header button:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-details {
+            margin-bottom: 30px;
+        }
+
+        .comments-section {
+            margin-top: 30px;
+        }
+
+        .comment {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .comment h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #007bff;
+        }
+
+        .comment p {
+            margin: 5px 0;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: gray;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+
+        .product-details img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <button onclick="history.back()">Back</button>
+        <h1>Product Detail</h1>
+    </div>
+    <div class="container">
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <img id="productImage" src="images/ca-rot.jpg" />
+            <h2 id="productName">Product Name</h2>
+            <p><strong>Price:</strong> $<span id="productPrice">0.00</span></p>
+            <p><strong>Status:</strong> <span id="productStatus">Available</span></p>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <h3>Comments</h3>
+            <div id="commentsList">
+                <!-- Dynamic comments will be appended here -->
+            </div>
+        </div>
+
+        <!-- Add Comment Section -->
+        <form id="addCommentForm">
+            <h3>Add a Comment</h3>
+            <textarea id="commentContent" rows="3" placeholder="Write your comment here..." required></textarea>
+            <button type="submit" class="button">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const productId = new URLSearchParams(window.location.search).get("productId");
+
+        async function fetchProductData() {
+            try {
+                const response = await fetch(`http://localhost:8080/api/products/${productId}`);
+                const data = await response.json();
+
+                // Populate product details
+                const product = data.product;
+
+                document.getElementById("productName").innerText = product.name;
+                document.getElementById("productPrice").innerText = product.price.toFixed(2);
+                document.getElementById("productStatus").innerText = product.status;
+
+                const productImage = document.getElementById("productImage");
+                console.log(product.urlImg)
+                if (product.urlImg) {
+                    productImage.setAttribute("src", "images/" + product.urlImg); 
+                }
+                // Populate comments
+                const commentsList = document.getElementById("commentsList");
+                commentsList.innerHTML = ""; // Clear existing comments
+
+                data.comments.forEach((comment) => {
+                    const commentDiv = document.createElement("div");
+                    commentDiv.classList.add("comment");
+                    commentDiv.innerHTML = `
+              <h4>${comment.firstName} ${comment.lastName}</h4>
+              <p>${comment.content}</p>
+              <span class="comment-time">${new Date(comment.createDate).toLocaleString()}</span>
+            `;
+                    commentsList.appendChild(commentDiv);
+                });
+            } catch (error) {
+                console.error("Error fetching product data:", error);
+            }
+        }
+
+        document.getElementById("addCommentForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const commentContent = document.getElementById("commentContent").value;
+            const account = JSON.parse(localStorage.getItem("account"));
+            try {
+                const response = await fetch(`http://localhost:8080/api/products/add-comment/${productId}/comment`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        content: commentContent,
+                        supplierId: account.supplierId,
+                        farmerId: account.farmerId,
+                    }),
+                });
+
+                if (response.ok) {
+                    fetchProductData(); // Reload comments
+                    document.getElementById("addCommentForm").reset();
+                } else {
+                    console.error("Error adding comment");
+                }
+            } catch (error) {
+                console.error("Error adding comment:", error);
+            }
+        });
+
+        // Load data on page load
+        fetchProductData();
+    </script>
+</body>
+
+</html>

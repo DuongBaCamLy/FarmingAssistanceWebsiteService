@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Farmer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .header {
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .container {
+      width: 90%;
+      margin: 20px auto;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .edit-button {
+      padding: 5px 10px;
+      background-color: #ffc107;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .edit-button:hover {
+      background-color: #e0a800;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <button onclick="goBack()"
+      style="float: left; margin: 10px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+      Back
+    </button>
+    <h1>Manage Supplier</h1>
+  </div>
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Supplier Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody id="farmer-table-body">
+        <!-- Data will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const suppliers = []
+
+    // Fetch suppliers data from the API
+    async function fetchFarmers() {
+      try {
+        const response = await fetch("http://localhost:8080/api/suppliers")
+        if (!response.ok) {
+          throw new Error("Failed to fetch suppliers")
+        }
+        const data = await response.json()
+        // Map API data to suppliers array
+        data.forEach((supplier) => {
+          suppliers.push({
+            id: supplier.supplierId,
+            name: `${supplier.account.firstName} ${supplier.account.lastName}`,
+            email: supplier.account.email,
+            phone: supplier.account.phone,
+            status: supplier.account.status || 'Pending',
+            userId: supplier.account.userId,
+            username: supplier.account.username,
+          })
+        })
+        renderFarmers()
+      } catch (error) {
+        console.error("Error fetching suppliers:", error)
+        alert("Failed to load suppliers. Please try again later.")
+      }
+    }
+
+    // Render suppliers in the table
+    function renderFarmers() {
+      const tableBody = document.getElementById("farmer-table-body")
+      tableBody.innerHTML = "" // Clear existing data
+      suppliers.forEach((farmer) => {
+        const row = document.createElement("tr")
+        row.innerHTML = `
+            <td>${farmer.id}</td>
+            <td>${farmer.name}</td>
+            <td>${farmer.email}</td>
+            <td>${farmer.phone}</td>
+            <td>${farmer.status}</td>
+            <td>
+              <button class="edit-button" onclick="editFarmer(${farmer.userId}, '${farmer.username}')">Edit</button>
+            </td>
+          `
+        tableBody.appendChild(row)
+      })
+    }
+
+    // Navigate to the UserDetail page
+    function editFarmer(userId, username) {
+      window.location.href = `UserDetail.html?userId=${userId}&username=${username}`
+    }
+
+    function goBack() {
+            window.history.back();
+        }
+    // Initial fetch
+    fetchFarmers()
+  </script>
+</body>
+
+</html>

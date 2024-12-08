@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Registration</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("https://example.com/background.jpg"); /* Replace with the actual background image URL */
+        background-size: cover;
+        background-position: center;
+      }
+      .container {
+        text-align: center;
+        padding: 30px;
+      }
+      .header {
+        position: relative;
+        padding: 20px;
+        background-color: rgba(0, 128, 0, 0.8);
+      }
+      .header img {
+        width: 60px;
+        height: auto;
+        float: left;
+      }
+      .header h1 {
+        color: #fff;
+        font-size: 24px;
+        text-align: center;
+        margin: 0;
+      }
+      .registration-box {
+        margin: 50px auto;
+        padding: 30px;
+        width: 400px;
+        background-color: #8fce00;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+      .registration-box h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #000;
+        text-transform: uppercase;
+      }
+      .registration-box label {
+        font-size: 16px;
+        display: block;
+        margin: 10px 0 5px;
+        color: #000;
+      }
+      .registration-box input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .registration-box button {
+        width: 48%;
+        padding: 10px;
+        margin: 5px;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .registration-box button:hover {
+        background-color: #218838;
+      }
+      .back-button {
+        background-color: #dc3545;
+      }
+      .back-button:hover {
+        background-color: #c82333;
+      }
+      .link {
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #007bff;
+      }
+      .link:hover {
+        color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="https://example.com/logo.jpg" alt="Logo" />
+      <!-- Replace with actual logo URL -->
+      <h1>FARMING ASSISTANCE WEB SERVICE</h1>
+    </div>
+    <div class="container">
+      <div class="registration-box">
+        <h2>Farmer Registration</h2>
+        <form action="#" method="POST">
+          <label for="user-id">User ID:</label>
+          <input type="text" id="user-id" name="user-id" required />
+
+          <label for="farmer-name">Farmer Name:</label>
+          <input type="text" id="farmer-name" name="farmer-name" required />
+
+          <label for="phone-number">Phone Number:</label>
+          <input type="text" id="phone-number" name="phone-number" required />
+
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">Submit</button>
+          <a href="FarmerLogin.html" class="back-button">Back to Login</a>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

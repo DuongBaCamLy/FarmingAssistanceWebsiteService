@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaint Page</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("https://example.com/background.jpg"); /* Replace with the actual background image URL */
+        background-size: cover;
+        background-position: center;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        background-color: rgba(0, 128, 0, 0.8);
+        padding: 10px 20px;
+      }
+      .header img {
+        width: 50px;
+        height: auto;
+        margin-right: 20px;
+      }
+      .header h1 {
+        color: #fff;
+        font-size: 24px;
+        margin: 0;
+      }
+      .nav-bar {
+        display: flex;
+        justify-content: center;
+        background-color: #007bff;
+        padding: 10px;
+      }
+      .nav-bar a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #0056b3;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      .nav-bar a:hover {
+        background-color: #003d80;
+      }
+      .container {
+        text-align: center;
+        margin: 30px auto;
+        width: 60%;
+        padding: 20px;
+        background-color: #ffffffcc;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .container h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+      }
+      .container label {
+        font-size: 16px;
+        display: block;
+        margin: 10px 0 5px;
+        color: #333;
+      }
+      .container input,
+      .container textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .container button {
+        width: 48%;
+        padding: 10px;
+        margin: 5px;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .container button:hover {
+        background-color: #218838;
+      }
+      .back-button {
+        background-color: #dc3545;
+      }
+      .back-button:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="https://example.com/logo.jpg" alt="Logo" />
+      <!-- Replace with actual logo URL -->
+      <h1>FARMING ASSISTANCE WEB SERVICE</h1>
+    </div>
+    <div class="nav-bar">
+      <a href="#">Weather</a>
+      <a href="#">Field</a>
+      <a href="#">Write Complaint</a>
+      <a href="#">Product</a>
+    </div>
+    <div class="container">
+      <h2>Complaint Page</h2>
+      <form action="#" method="POST">
+        <label for="complaint-id">Complaint ID:</label>
+        <input type="text" id="complaint-id" name="complaint-id" required />
+
+        <label for="complaint">Complaint:</label>
+        <input type="text" id="complaint" name="complaint" required />
+
+        <label for="detailed-description">Detailed Description:</label>
+        <textarea
+          id="detailed-description"
+          name="detailed-description"
+          rows="4"
+          required
+        ></textarea>
+
+        <button type="submit">Submit</button>
+        <button type="button" class="back-button" onclick="history.back()">
+          Back
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

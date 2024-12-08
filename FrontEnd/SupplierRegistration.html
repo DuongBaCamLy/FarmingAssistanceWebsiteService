@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supplier Registration</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #bdf5bd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        width: 400px;
+        text-align: center;
+      }
+      .logo img {
+        max-width: 100px;
+      }
+      .container h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin: 15px 0;
+        text-align: left;
+      }
+      .form-group label {
+        font-size: 14px;
+        color: #000;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .buttons button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .submit-button {
+        background-color: #28a745;
+        color: white;
+      }
+      .submit-button:hover {
+        background-color: #218838;
+      }
+      .back-button {
+        background-color: #007bff;
+        color: white;
+      }
+      .back-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img src="https://example.com/logo.jpg" alt="Logo" />
+        <!-- Thay URL logo tại đây -->
+      </div>
+      <h2>SUPPLIER REGISTRATION</h2>
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="user-id">USER ID:</label>
+          <input type="text" id="user-id" name="user_id" required />
+        </div>
+        <div class="form-group">
+          <label for="suplier-name">SUPPLIER NAME:</label>
+          <input type="text" id="supplier-name" name="supplier_name" required />
+        </div>
+        <div class="form-group">
+          <label for="address">ADDRESS:</label>
+          <input type="text" id="address" name="address" required />
+        </div>
+        <div class="form-group">
+          <label for="phone-number">PHONE NUMBER:</label>
+          <input type="text" id="phone-number" name="phone_number" required />
+        </div>
+        <div class="form-group">
+          <label for="password">PASSWORD:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="buttons">
+          <button type="submit" class="submit-button">SUBMIT</button>
+          <button
+            type="button"
+            class="back-button"
+            onclick="window.history.back()"
+          >
+            BACK
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Field</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      .header {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .container {
+        width: 50%;
+        margin: 20px auto;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        margin: 10px 0 5px;
+        font-weight: bold;
+      }
+      input,
+      select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .button {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Add New Field</h1>
+    </div>
+    <div class="container">
+      <form id="newFieldForm">
+        <h2>Field Information</h2>
+        <label for="name">Field Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter field name" required />
+
+        <label for="status">Field Status</label>
+        <select id="status" name="status" required>
+          <option value="Active">Active</option>
+          <option value="Pending">Pending</option>
+        </select>
+
+        <h2>Soil Information</h2>
+        <label for="pHLevel">pH Level</label>
+        <input type="number" step="0.01" id="pHLevel" name="pHLevel" placeholder="Enter pH level" required />
+
+        <label for="temperature">Temperature</label>
+        <input type="number" step="0.1" id="temperature" name="temperature" placeholder="Enter temperature (°C)" required />
+
+        <button type="submit" class="button">Create Field</button>
+      </form>
+    </div>
+    <script>
+      const farmerId =JSON.parse(localStorage.getItem("account")).farmerId
+      document.getElementById("newFieldForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const status = document.getElementById("status").value;
+        const pHLevel = parseFloat(document.getElementById("pHLevel").value);
+        const temperature = parseFloat(document.getElementById("temperature").value);
+
+        try {
+          const response = await fetch(`http://localhost:8080/api/fields/farmer/${farmerId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                field:{
+                    name: name,
+                    status: status,
+                },
+              
+              soil: {
+                pHLevel: pHLevel,
+                temperature: temperature,
+              },
+            }),
+          });
+
+          if (response.ok) {
+            alert("Field created successfully!");
+            history.back()
+          } else {
+            alert("Failed to create field. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error creating field:", error);
+          alert("Error creating field. Please try again.");
+        }
+      });
+    </script>
+  </body>
+</html>

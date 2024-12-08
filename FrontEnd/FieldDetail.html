@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Field</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 50%;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <button onclick="history.back()"
+            style="float: left; margin: 10px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+            Back
+        </button>
+        <h1>Edit Field</h1>
+    </div>
+    <div class="container">
+        <form id="editFieldForm">
+            <h2>Field Information</h2>
+            <label for="name">Field Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter field name" required />
+
+            <label for="status">Field Status</label>
+            <select id="status" name="status" required>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+            </select>
+
+            <h2>Soil Information</h2>
+            <label for="pHLevel">pH Level</label>
+            <input type="number" step="0.01" id="pHLevel" name="pHLevel" placeholder="Enter pH level" required />
+
+            <label for="temperature">Temperature</label>
+            <input type="number" step="0.1" id="temperature" name="temperature" placeholder="Enter temperature (°C)"
+                required />
+
+            <button type="submit" class="button">Update Field</button>
+        </form>
+    </div>
+    <script>
+        const fieldId = new URLSearchParams(window.location.search).get("fieldId");
+        const apiUrl = `http://localhost:8080/api/fields/${fieldId}`;
+
+        async function fetchFieldData() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch field data");
+                }
+
+                const data = await response.json();
+
+                // Populate form fields with existing data
+                document.getElementById("name").value = data.field.name;
+                document.getElementById("status").value = data.field.status;
+                if (data.soil) {
+                    document.getElementById("pHLevel").value = data.soil.pHLevel;
+                    document.getElementById("temperature").value = data.soil.temperature;
+                }
+            } catch (error) {
+                console.error("Error fetching field data:", error);
+                alert("Failed to load field data. Please try again.");
+            }
+        }
+
+        document.getElementById("editFieldForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const status = document.getElementById("status").value;
+            const pHLevel = parseFloat(document.getElementById("pHLevel").value);
+            const temperature = parseFloat(document.getElementById("temperature").value);
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        field: {
+                            name: name,
+                            status: status,
+                        },
+                        soil: {
+                            pHLevel: pHLevel,
+                            temperature: temperature,
+                        },
+                    }),
+                });
+
+                if (response.ok) {
+                    alert("Field updated successfully!");
+                    history.back();
+                } else {
+                    alert("Failed to update field. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error updating field:", error);
+                alert("Error updating field. Please try again.");
+            }
+        });
+
+        // Fetch field data when the page loads
+        fetchFieldData();
+    </script>
+</body>
+
+</html>
